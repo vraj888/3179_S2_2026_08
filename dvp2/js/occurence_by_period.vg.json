@@ -1,11 +1,14 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  
   "data": {
     "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/occurence_per_period.csv",
     "format": {"type": "csv"}
   },
-
-  "transform": [
+  "vconcat":[{
+    "width":"container",
+    "height": 250,
+    "transform": [
     {
       "calculate": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2",
       "as": "mid_ma"
@@ -19,28 +22,76 @@
       "groupby": ["time_bin"]
     }
   ],
-  
   "mark": {
     "type": "line",
     "color": "#333333",
     "strokeWidth": 2,
     "point": {"filled": true, "size": 28}
   },
-  "encoding": {
-    "x": {
-      "field": "time_bin",
-      "type": "quantitative",
-      "scale": {"domain": [0, 252], "reverse": true, "nice": false},
-      "axis": {"title": "Millions of years ago"}
-    },
-    "y": {
-      "field": "observations",
-      "type": "quantitative",
-      "title": "Number of observations"
-    },
-    "tooltip": [
-      {"field": "time_bin", "type": "quantitative", "title": "Time (Ma)"},
-      {"field": "observations", "type": "quantitative", "title": "Observations"}
-    ]
-  }
+  "encoding": 
+    {
+      "x": {
+        "field": "time_bin",
+        "type": "quantitative",
+        "scale": {"domain": {"param": "periodSel"}, "reverse": true, "nice": false},
+        "axis": {"title": "Millions of years ago"}
+      },
+      "y": {
+        "field": "observations",
+        "type": "quantitative",
+        "title": "Number of observations"
+      },
+      "tooltip": [
+        {"field": "time_bin", "type": "quantitative", "title": "Time (Ma)"},
+        {"field": "observations", "type": "quantitative", "title": "Observations"}
+      ]
+    }
+  },
+  {
+      "width": "container",
+      "height": 40,
+      "data": {"values": [
+        {"period": "Triassic",   "start_ma": 251.9, "end_ma": 201.4},
+        {"period": "Jurassic",   "start_ma": 201.4, "end_ma": 145},
+        {"period": "Cretaceous", "start_ma": 145,   "end_ma": 66},
+        {"period": "Paleogene",  "start_ma": 66,    "end_ma": 23.03},
+        {"period": "Neogene",    "start_ma": 23.03, "end_ma": 2.58},
+        {"period": "Quaternary", "start_ma": 2.58,  "end_ma": 0}
+      ]},
+      "transform": [
+        {"calculate": "'Period'", "as": "row"},
+        {"calculate": "(datum.start_ma + datum.end_ma) / 2", "as": "mid"}
+       
+      ],
+      "layer": [
+        {
+          "params": [{"name": "periodSel", "select": {"type": "interval", "encodings": ["x"]}}],
+          "mark": {"type": "rect", "cursor": "pointer", "stroke": "white", "strokeWidth": 1},
+          "encoding": {
+            "x": {"field": "start_ma", "type": "quantitative",
+                  "scale": {"reverse": false, "domain": [252, 0], "nice": false},
+                  "axis": {"title": "Millions of years ago"}},
+            "x2": {"field": "end_ma"},
+            "y": {"field": "row", "type": "nominal",
+                  "axis": {"title": null, "labels": false, "ticks": false, "domain": false, "minExtent": 50}},
+            "color": {"field": "period", "type": "nominal", "legend": null,
+              "scale": {
+                "domain": ["Triassic","Jurassic","Cretaceous","Paleogene","Neogene","Quaternary"],
+                "range": ["#964ea4","#56bed2","#94cf6b","#fdaa6f","#ffea3f","#fafa94"]}},
+            "opacity": {"condition": {"param": "periodSel", "value": 1}, "value": 0.4}
+          }
+        },
+        {
+          "transform": [{"filter": "datum.start_ma - datum.end_ma > 20"}],
+          "mark": {"type": "text", "fontSize": 12, "fontWeight": "bold", "color": "#222"},
+          "encoding": {
+            "x": {"field": "mid", "type": "quantitative",
+                  "scale": {"reverse": true, "domain": [252, 0], "nice": false}},
+            "y": {"field": "row", "type": "nominal"},
+            "text": {"field": "period"}
+          }
+        }
+      ]
+    }
+]
 }
