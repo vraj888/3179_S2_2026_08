@@ -112,10 +112,19 @@
     },
     {
       "data": {
+        "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/7_others/oceans.topojson",
+        "format": {"type": "topojson", "feature": "oceans"}
+      },
+      "mark": {"type": "geoshape", "fill": "skyblue"}
+    },
+  
+    {
+      "data": {
         "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/data/earth_occurences_location.csv",
         "format": {"type": "csv"}
       },
-      "mark": {"type": "circle", "color": "red", "opacity": 0.5,"size": 30,"tooltip":{"content": "data"}},
+
+      "mark": {"type": "circle", "color": "red", "opacity": 0.5, "size": 30},
       "transform": [
         {
           "calculate": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2",
@@ -126,7 +135,8 @@
       ],
       "encoding": {
         "longitude": {"field": "lng", "type": "quantitative"},
-        "latitude": {"field": "lat", "type": "quantitative"}
+        "latitude": {"field": "lat", "type": "quantitative"},
+        "tooltip": [{"field": "mid_ma", "type": "quantitative", "title": "Approx. age (Ma)"}]
       }
     }
   ]
