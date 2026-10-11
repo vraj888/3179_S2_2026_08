@@ -1,0 +1,63 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "A simulated spiral chart using trigonometric transforms in Vega-Lite.",
+  "width": 400,
+  "height": 400,
+  "data": {
+    "sequence": {"start": 1, "stop": 101, "as": "index"}
+  },
+  "transform": [
+    {
+      "calculate": "datum.index * 35", 
+      "as": "value"
+    },
+    {
+      "calculate": "datum.index * 0.2",
+      "as": "theta"
+    },
+    {
+      "calculate": "20 + (5 * datum.theta)",
+      "as": "radius"
+    },
+    {
+      "calculate": "datum.radius * cos(datum.theta)",
+      "as": "x"
+    },
+    {
+      "calculate": "datum.radius * sin(datum.theta)",
+      "as": "y"
+    }
+  ],
+  "mark": {"type": "circle", "opacity": 0.8},
+  "encoding": {
+    "x": {
+      "field": "x",
+      "type": "quantitative",
+      "axis": null
+    },
+    "y": {
+      "field": "y",
+      "type": "quantitative",
+      "axis": null
+    },
+    "size": {
+      "field": "value",
+      "type": "quantitative",
+      "scale": {"range": [50, 500]},
+      "legend": {"title": "Metric Value"}
+    },
+    "color": {
+      "field": "value",
+      "type": "quantitative",
+      "scale": {"scheme": "viridis"},
+      "legend": null
+    },
+    "tooltip": [
+      {"field": "index", "type": "quantitative", "title": "Sequence #"},
+      {"field": "value", "type": "quantitative", "title": "Value"}
+    ]
+  },
+  "config": {
+    "view": {"stroke": null}
+  }
+}
