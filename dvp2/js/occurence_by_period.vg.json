@@ -140,6 +140,150 @@
       }
     }
   ]
+  },
+  {
+  
+ "width": 800,
+ "height": 340,
+ 
+ "transform": [
+  {
+    "calculate": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2",
+    "as": "mid_ma"
+  },
+  {"calculate": "datum.mid_ma", "as": "start_ma"},
+  {"filter": {"param": "periodSel"}},
+  {"filter":"datum.accepted_rank === 'genus'"},
+  {
+   "aggregate": [
+    {
+     "op": "count",
+     "as": "count"
+    }
+   ],
+   "groupby": [
+    "accepted_name"
+   ]
+  },
+  {
+   "window": [
+    {
+     "op": "row_number",
+     "as": "rank"
+    }
+   ],
+   "sort": [
+    {
+     "field": "count",
+     "order": "descending"
+    }
+   ]
+  },
+  {
+   "filter": "datum.rank <= 10"
+  },
+  {
+   "calculate": "datum.rank === 10 ? 1 : (datum.rank - 1) % 2",
+   "as": "col"
+  },
+  {
+   "calculate": "floor((datum.rank - 1) / 2)",
+   "as": "row"
+  }
+ ],
+ "encoding": {
+  "x": {
+   "field": "col",
+   "type": "quantitative",
+   "axis": null,
+   "scale": {
+    "domain": [
+     -0.5,
+     2.5
+    ]
+   }
+  },
+  "y": {
+   "field": "row",
+   "type": "quantitative",
+   "axis": null,
+   "scale": {
+    "domain": [
+     3.5,
+     -0.5
+    ]
+   }
+  }
+ },
+ "layer": [
+  {
+   "mark": {
+    "type": "text",
+    "align": "center",
+    "baseline": "middle",
+    "fontWeight": "bold"
+   },
+   "encoding": {
+    "text": {
+     "field": "accepted_name",
+     "type": "nominal"
+    },
+    "size": {
+     "field": "count",
+     "type": "quantitative",
+     "scale": {
+      "type": "sqrt",
+      "zero": true,
+      "range": [
+       0,
+       40
+      ]
+     },
+     "legend": null
+    },
+    "color": {
+     "field": "count",
+     "type": "quantitative",
+     "scale": {
+      "scheme": "oranges",
+      "domain": [
+       0,
+       200
+      ]
+     },
+     "legend": null
+    },
+    "tooltip": [
+     {
+      "field": "accepted_name",
+      "title": "Genus"
+     },
+     {
+      "field": "count",
+      "title": "Occurrences"
+     }
+    ]
+   }
+  },
+  {
+   "mark": {
+    "type": "text",
+    "align": "center",
+    "baseline": "middle",
+    "dy": 26,
+    "fontSize": 12,
+    "color": "#555"
+   },
+   "encoding": {
+    "text": {
+     "field": "count",
+     "type": "quantitative",
+     "format": ","
+    }
+   }
+  }
+ ]
+
   }
   
 ]
