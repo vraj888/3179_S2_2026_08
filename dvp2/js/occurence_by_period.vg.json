@@ -41,7 +41,8 @@
       "y": {
         "field": "observations",
         "type": "quantitative",
-        "title": "Number of observations"
+        "title": "Number of observations",
+        "scale": {"type": "log"}
       },
       "tooltip": [
         {"field": "time_bin", "type": "quantitative", "title": "Time (Ma)"},
