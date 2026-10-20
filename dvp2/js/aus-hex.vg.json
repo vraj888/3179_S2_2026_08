@@ -165,7 +165,7 @@
             "mark":{
                 "type": "geoshape",
                 "filled": false,
-                "stroke":"steelblue"
+                "stroke":"lightblue"
             }
         }
     ]
