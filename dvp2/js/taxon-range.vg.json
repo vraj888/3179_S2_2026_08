@@ -1,0 +1,27 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 650,
+  "height": 450,
+  "data": {
+    "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/e213d1bea1f387ef87f17f64582a0c7c9653e28b/dvp2/data/taxon-first-last.csv",
+    "format": {"type": "csv", "parse": {"max_ma": "number", "min_ma": "number"}}
+  },
+  "transform": [
+    {"window": [{"op": "row_number", "as": "rank"}],
+    "sort": [{"field": "n_occs", "order": "descending"}]}
+    ],
+    "mark": {"type": "bar"},
+        "encoding": {
+        "y": {"field": "taxon_name", "type": "nominal",
+            "sort": {"field": "firstapp_max_ma", "order": "descending"}, "title": null},
+        "x": {"field": "firstapp_max_ma", "type": "quantitative",
+            "scale": {"reverse": true, "domain": [252, 50]}, "title": "Millions of years ago"},
+        "x2": {"field": "lastapp_min_ma"},
+        "tooltip": [
+        {"field": "taxon_name", "title": "Genus"},
+        {"field": "n_occs", "title": "Fossils found"},
+        {"field": "firstapp_max_ma", "title": "First appears (Ma)"},
+        {"field": "lastapp_min_ma", "title": "Last appears (Ma)"}
+        ]
+    }
+}
