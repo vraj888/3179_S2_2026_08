@@ -1,23 +1,38 @@
 {
-  "title": {"text": "200 million years ago", "subtitle": "Pangaea: one supercontinent", "anchor": "start", "fontSize": 13},
-  "width": 260,
-  "height": 140,
-  "projection": {"type": "equalEarth"},
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 450,
+  "projection": {
+    "type": "equalEarth"
+  },
   "layer": [
+  
     {
-      "data": {"sphere": true},
-      "mark": {"type": "geoshape", "fill": "#dbeaf3"}
-    },
-    {
-      "data": {"graticule": {"step": [30, 30]}},
-      "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.5, "filled": false}
+      "data": {
+        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/fe99d36d99a3578f6d5ca69e5d6192fa192e6b09/dvp2/js/gplates/topo/earth-110mya.json",
+        "format": {"type": "topojson", "feature": "earth-110mya"}
+      },
+      "mark": {"type": "geoshape", "fill": "#eee7d9", "stroke": "#9c8a66", "strokeWidth": 0.3}
     },
     {
       "data": {
-        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/e0f0103658bfeb3231fa25a98b7d520ad67ebeca/dvp2/js/earth-200mya.json",
-        "format": {"type": "topojson", "feature": "coast_200"}
+        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/data/earth_occurences_location.csv",
+        "format": {"type": "csv"}
       },
-      "mark": {"type": "geoshape", "fill": "#d8c9a8", "stroke": "#9c8a66", "strokeWidth": 0.3}
+
+      "mark": {"type": "circle", "color": "red", "opacity": 0.5, "size": 30},
+      "transform": [
+        {
+          "calculate": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2",
+          "as": "mid_ma"
+        },
+        {"calculate": "datum.mid_ma", "as": "start_ma"}
+      ],
+      "encoding": {
+        "longitude": {"field": "lng", "type": "quantitative"},
+        "latitude": {"field": "lat", "type": "quantitative"},
+        "tooltip": [{"field": "mid_ma", "type": "quantitative", "title": "Approx. age (Ma)"}]
+      }
     }
   ]
 }
