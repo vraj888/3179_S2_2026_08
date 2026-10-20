@@ -90,7 +90,15 @@
                 <h1>Lithology distribution on a world map with fossile found in that lithology overlay</h1>
             </div>
             <div class="row">
-                <h1>most active fossil sites around australia</h1>
+                <div id="aus-hex" style="width:100%; min-height:300px;"></div>
+                        <script type="text/javascript">
+                            var spec2 = "js/aus-hex.vg.json";
+                            vegaEmbed('#aus-hex', spec2)
+                                .then(function(result) {
+                                    // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+                                })
+                                .catch(console.error);
+                        </script>
             </div>
         </div>
     </body>

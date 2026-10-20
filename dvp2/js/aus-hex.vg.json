@@ -1,0 +1,157 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 800,
+    "height": 500,
+    "projection": {
+        "type": "mercator",
+        "center": [
+            134,
+            -28
+        ],
+        "scale": 700
+    },
+    "layer": [
+        {
+            "data": {
+                "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/js/au-states-topo.json",
+                "format": {
+                    "type": "topojson",
+                    "feature": "austates"
+                }
+            },
+            "mark": {
+                "type": "geoshape",
+                "fill": "white",
+                "stroke": "lightgray"
+            }
+        },
+        {
+            "data": {
+                "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/earth_occurences_location.csv",
+                "format": {
+                    "type": "csv",
+                    "parse": {
+                        "lng": "number",
+                        "lat": "number"
+                    }
+                }
+            },
+            "transform": [
+                {
+                    "filter": "datum.lng > 110 && datum.lng < 155 && datum.lat > -45 && datum.lat < -9"
+                },
+                {
+                    "calculate": "log(tan(PI / 4 + datum.lat * PI / 360)) * 180 / PI",
+                    "as": "merc_y"
+                },
+                {
+                    "calculate": "datum.merc_y / (1.5 * 0.5)",
+                    "as": "py"
+                },
+                {
+                    "calculate": "round(datum.py)",
+                    "as": "pj"
+                },
+                {
+                    "calculate": "datum.lng / (sqrt(3) * 0.5) - (abs(datum.pj) % 2) / 2",
+                    "as": "px"
+                },
+                {
+                    "calculate": "round(datum.px)",
+                    "as": "pi"
+                },
+                {
+                    "calculate": "datum.pi + (datum.px < datum.pi ? -1 : 1) / 2",
+                    "as": "pi2"
+                },
+                {
+                    "calculate": "datum.pj + (datum.py < datum.pj ? -1 : 1)",
+                    "as": "pj2"
+                },
+                {
+                    "calculate": "abs(datum.py - datum.pj) * 3 > 1 && pow(datum.px - datum.pi, 2) + pow(datum.py - datum.pj, 2) > pow(datum.px - datum.pi2, 2) + pow(datum.py - datum.pj2, 2)",
+                    "as": "use_neighbour"
+                },
+                {
+                    "calculate": "datum.use_neighbour ? datum.pi2 + (abs(datum.pj) % 2 ? 1 : -1) / 2 : datum.pi",
+                    "as": "hex_i"
+                },
+                {
+                    "calculate": "datum.use_neighbour ? datum.pj2 : datum.pj",
+                    "as": "hex_j"
+                },
+                {
+                    "calculate": "(datum.hex_i + (abs(datum.hex_j) % 2) / 2) * sqrt(3) * 0.5",
+                    "as": "hex_lng"
+                },
+                {
+                    "calculate": "(2 * atan(exp(datum.hex_j * 1.5 * 0.5 * PI / 180)) - PI / 2) * 180 / PI",
+                    "as": "hex_lat"
+                },
+                {
+                    "aggregate": [
+                        {
+                            "op": "count",
+                            "as": "occurrences"
+                        }
+                    ],
+                    "groupby": [
+                        "hex_lng",
+                        "hex_lat"
+                    ]
+                }
+            ],
+            "mark": {
+                "type": "point",
+                "filled": true,
+                "shape": "M0,-1L0.866,-0.5L0.866,0.5L0,1L-0.866,0.5L-0.866,-0.5Z",
+                "size": {
+                    "expr": "pow(2 * 0.5 * 700 * PI / 180, 2)"
+                },
+                "opacity": 0.9,
+                "stroke": "lightgrey",
+                "strokeWidth": 0.5
+            },
+            "encoding": {
+                "longitude": {
+                    "field": "hex_lng",
+                    "type": "quantitative"
+                },
+                "latitude": {
+                    "field": "hex_lat",
+                    "type": "quantitative"
+                },
+                "color": {
+                    "field": "occurrences",
+                    "type": "quantitative",
+                    "scale": {
+                        "type": "log",
+                        "scheme": "orangered"
+                    },
+                    "legend": {
+                        "title": "Fossil occurrences"
+                    }
+                },
+                "tooltip": [
+                    {
+                        "field": "occurrences",
+                        "type": "quantitative",
+                        "title": "Occurrences"
+                    },
+                    {
+                        "field": "hex_lat",
+                        "type": "quantitative",
+                        "title": "Latitude",
+                        "format": ".1f"
+                    },
+                    {
+                        "field": "hex_lng",
+                        "type": "quantitative",
+                        "title": "Longitude",
+                        "format": ".1f"
+                    }
+                ]
+            }
+        }
+    ]
+}
