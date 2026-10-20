@@ -1,0 +1,65 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Waffle chart: out of every 100 dinosaur fossils with a known diet, how many were plant-eaters, omnivores or meat-eaters, per period.",
+  "data": {
+    "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/occurence_ecospace.csv",
+    "format": {"type": "csv", "parse": {"max_ma": "number"}}
+  },
+  "transform": [
+    {"filter": "datum.max_ma > 66"},
+    {"calculate": "test(/herbiv|graz|brows|frugiv|granivor/, datum.diet) ? 'Plant-eaters' : test(/carniv|pisciv|insectiv/, datum.diet) ? 'Meat-eaters' : test(/omniv/, datum.diet) ? 'Omnivores' : 'Unknown'", "as": "diet_group"},
+    {"filter": "datum.diet_group !== 'Unknown'"},
+    {"calculate": "datum.max_ma > 201.4 ? 'Triassic' : datum.max_ma > 143.1 ? 'Jurassic' : 'Cretaceous'", "as": "period"},
+
+    {"aggregate": [{"op": "count", "as": "fossils"}], "groupby": ["period", "diet_group"]},
+    {"joinaggregate": [{"op": "sum", "field": "fossils", "as": "total"}], "groupby": ["period"]},
+
+    {"calculate": "indexof(['Plant-eaters', 'Omnivores', 'Meat-eaters'], datum.diet_group)", "as": "diet_order"},
+    {"window": [{"op": "sum", "field": "fossils", "as": "cum_end"}],
+     "groupby": ["period"], "sort": [{"field": "diet_order"}], "frame": [null, 0]},
+
+    {"calculate": "round((datum.cum_end - datum.fossils) / datum.total * 100)", "as": "first_cell"},
+    {"calculate": "round(datum.cum_end / datum.total * 100)", "as": "last_cell"},
+    {"calculate": "datum.fossils / datum.total", "as": "share"},
+    {"calculate": "sequence(datum.first_cell, datum.last_cell)", "as": "cell"},
+    {"flatten": ["cell"]},
+    {"filter": "isValid(datum.cell)"},
+
+    {"calculate": "datum.cell % 10", "as": "col"},
+    {"calculate": "floor(datum.cell / 10)", "as": "row"}
+  ],
+  "facet": {
+    "column": {
+      "field": "period",
+      "type": "nominal",
+      "sort": ["Triassic", "Jurassic", "Cretaceous"],
+      "header": {"title": null, "labelFontSize": 13, "labelFontWeight": "bold", "labelOrient": "top"}
+    }
+  },
+  "spec": {
+    "width": 160,
+    "height": 160,
+    "mark": {"type": "square", "size": 170, "stroke": "white", "strokeWidth": 1},
+    "encoding": {
+      "x": {"field": "col", "type": "ordinal", "axis": null},
+      "y": {"field": "row", "type": "ordinal", "axis": null},
+      "color": {
+        "field": "diet_group",
+        "type": "nominal",
+        "title": "Diet",
+        "scale": {
+          "domain": ["Plant-eaters", "Omnivores", "Meat-eaters"],
+          "range":  ["#4a8c3f", "#e0a33a", "#d94841"]
+        },
+        "legend": {"orient": "bottom", "direction": "horizontal", "symbolType": "square"}
+      },
+      "tooltip": [
+        {"field": "period", "title": "Period"},
+        {"field": "diet_group", "title": "Diet"},
+        {"field": "fossils", "type": "quantitative", "title": "Fossils", "format": ","},
+        {"field": "share", "type": "quantitative", "title": "Share", "format": ".0%"}
+      ]
+    }
+  },
+  "config": {"view": {"stroke": null}, "facet": {"spacing": 30}}
+}

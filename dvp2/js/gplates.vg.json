@@ -13,7 +13,7 @@
   
     {
       "data": {
-        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/e4c0cabfb83117de2348f2c37424786a959d5970/dvp2/js/gplates/topo/earth-50mya.json",
+        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/js/gplates/topo/earth-50mya.json",
         "format": {"type": "topojson", "feature": "earth-50mya"}
       },
       "mark": {"type": "geoshape", "fill": "#eee7d9", "stroke": "#9c8a66", "strokeWidth": 0.3}
