@@ -43,6 +43,7 @@
                     <div class="pure-u-1-2">
                         <h1>spiral chart of the geological time periods</h1>
                     </div>
+                    
                 </div>
             </div>
             <div class="row">
@@ -51,7 +52,15 @@
                        
                     </div>
                     <div class="pure-u-1-2">
-                        <h1>australia map showing the fossils from that time</h1>
+                        <div id="taxon-range" style="width:100%; min-height:300px;"></div>
+                        <script type="text/javascript">
+                            var spec2 = "js/taxon-range.vg.json";
+                            vegaEmbed('#taxon-range', spec2)
+                                .then(function(result) {
+                                    // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+                                })
+                                .catch(console.error);
+                        </script>
                     </div>
                 </div>
             </div>
@@ -87,7 +96,7 @@
                 </div>
             </div>
             <div class="row">
-                <h1>Lithology distribution on a world map with fossile found in that lithology overlay</h1>
+                
             </div>
             <div class="row">
                 <div id="aus-hex" style="width:100%; min-height:300px;"></div>
