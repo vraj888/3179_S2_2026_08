@@ -1,38 +1,79 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "columns": 2,
+  "concat":[
+  {"title":{"text":"50 Mya"},
   "width": 800,
   "height": 450,
   "projection": {
-    "type": "equalEarth"
+  "type": "equalEarth",
+  "center": [135, -25]
   },
   "layer": [
   
     {
       "data": {
-        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/fe99d36d99a3578f6d5ca69e5d6192fa192e6b09/dvp2/js/gplates/topo/earth-110mya.json",
+        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/e4c0cabfb83117de2348f2c37424786a959d5970/dvp2/js/gplates/topo/earth-50mya.json",
+        "format": {"type": "topojson", "feature": "earth-50mya"}
+      },
+      "mark": {"type": "geoshape", "fill": "#eee7d9", "stroke": "#9c8a66", "strokeWidth": 0.3}
+    }
+    ]
+  },
+  {"title":{"text":"110 Mya"},
+  "width": 800,
+  "height": 450,
+  "projection": {
+  "type": "equalEarth",
+  "center": [135, -25]
+  },
+  "layer": [
+  
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/e4c0cabfb83117de2348f2c37424786a959d5970/dvp2/js/gplates/topo/earth-110mya.json",
         "format": {"type": "topojson", "feature": "earth-110mya"}
       },
       "mark": {"type": "geoshape", "fill": "#eee7d9", "stroke": "#9c8a66", "strokeWidth": 0.3}
-    },
+    }
+    ]
+  },
+  {"title":{"text":"150 Mya"},
+  "width": 800,
+  "height": 450,
+  "projection": {
+  "type": "equalEarth",
+  "center": [135, -25]
+  },
+  "layer": [
+  
     {
       "data": {
-        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/data/earth_occurences_location.csv",
-        "format": {"type": "csv"}
+        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/e4c0cabfb83117de2348f2c37424786a959d5970/dvp2/js/gplates/topo/earth-150mya.json",
+        "format": {"type": "topojson", "feature": "earth-150mya"}
       },
-
-      "mark": {"type": "circle", "color": "red", "opacity": 0.5, "size": 30},
-      "transform": [
-        {
-          "calculate": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2",
-          "as": "mid_ma"
-        },
-        {"calculate": "datum.mid_ma", "as": "start_ma"}
-      ],
-      "encoding": {
-        "longitude": {"field": "lng", "type": "quantitative"},
-        "latitude": {"field": "lat", "type": "quantitative"},
-        "tooltip": [{"field": "mid_ma", "type": "quantitative", "title": "Approx. age (Ma)"}]
-      }
+      "mark": {"type": "geoshape", "fill": "#eee7d9", "stroke": "#9c8a66", "strokeWidth": 0.3}
     }
+    ]
+  },
+  {"title":{"text":"200 Mya"},
+  "width": 800,
+  "height": 450,
+  "projection": {
+  "type": "equalEarth",
+  "center": [135, -25]
+  },
+  "layer": [
+  
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/e4c0cabfb83117de2348f2c37424786a959d5970/dvp2/js/gplates/topo/earth-200mya.json",
+
+        "format": {"type": "topojson", "feature": "earth-200mya"}
+      },
+      "mark": {"type": "geoshape", "fill": "#eee7d9", "stroke": "#9c8a66", "strokeWidth": 0.3}
+    }
+    ]
+  }
   ]
 }
