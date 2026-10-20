@@ -14,7 +14,7 @@
     },
     {
       "data": {
-        "url": "dvp2/js/earth-50mya.json",
+        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/e0f0103658bfeb3231fa25a98b7d520ad67ebeca/dvp2/js/earth-200mya.json",
         "format": {"type": "topojson", "feature": "coast_200"}
       },
       "mark": {"type": "geoshape", "fill": "#d8c9a8", "stroke": "#9c8a66", "strokeWidth": 0.3}
