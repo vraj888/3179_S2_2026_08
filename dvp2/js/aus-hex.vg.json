@@ -152,6 +152,21 @@
                     }
                 ]
             }
+        },
+        
+        {
+            "data":{
+                "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/js/ne_10m_rivers_australia.json",
+                "format":{
+                    "type": "topojson",
+                    "feature": "ne_10m_rivers_australia"
+                }
+            },
+            "mark":{
+                "type": "geoshape",
+                "filled": false,
+                "stroke":"steelblue"
+            }
         }
     ]
 }
