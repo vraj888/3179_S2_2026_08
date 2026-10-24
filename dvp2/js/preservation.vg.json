@@ -1,8 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Diverging stacked bar chart: how well dinosaur fossils are preserved in each epoch. Poor to the left, good and excellent to the right, medium straddling 0%.",
-  "width": 600,
-  "height": 260,
+  "description": "Linked diverging stacked bar charts: how well dinosaur fossils are preserved by epoch (top) and by rock type (bottom). Click an epoch to filter the rock-type chart.",
   "data": {
     "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/dinosauria_all.csv",
     "format": {"type": "csv", "parse": {"max_ma": "number", "min_ma": "number"}}
@@ -10,53 +8,86 @@
   "transform": [
     {"filter": "datum.max_ma > 66"},
     {"filter": "indexof(['poor', 'medium', 'good', 'excellent'], datum.preservation_quality) >= 0"},
-
     {"calculate": "datum.min_ma > 225 ? 'Triassic' :  datum.min_ma > 175 ? 'Jurassic' : datum.min_ma > 125 ? 'Cretaceous' : datum.min_ma > 75 ? 'Paleogene' : 'Neogene'", "as": "epoch"},
-    {"aggregate": [{"op": "count", "as": "fossils"}], "groupby": ["epoch", "preservation_quality"]},
-    {"joinaggregate": [{"op": "sum", "field": "fossils", "as": "epoch_total"}], "groupby": ["epoch"]},
-    {"calculate": "datum.fossils / datum.epoch_total * 100", "as": "percentage"},
-
-    {"calculate": "indexof(['poor', 'medium', 'good', 'excellent'], datum.preservation_quality)", "as": "q_order"},
-    {"calculate": "datum.preservation_quality === 'poor' ? datum.percentage : datum.preservation_quality === 'medium' ? datum.percentage / 2 : 0", "as": "signed_percentage"},
-
-    {"stack": "percentage", "as": ["v1", "v2"], "groupby": ["epoch"], "sort": [{"field": "q_order", "order": "ascending"}]},
-    {"joinaggregate": [{"op": "sum", "field": "signed_percentage", "as": "offset"}], "groupby": ["epoch"]},
-    {"calculate": "datum.v1 - datum.offset", "as": "nx"},
-    {"calculate": "datum.v2 - datum.offset", "as": "nx2"}
+    {"calculate": "lower(replace(datum.lithology1 || '', /\"/g, ''))", "as": "lith_raw"},
+    {"calculate": "test(/marl|mixed carbonate/, datum.lith_raw) ? 'Marl and mixed' : test(/lime|carbonate|wackestone|grainstone|packstone|dolomite|chalk|reef|rudstone|bindstone|framestone/, datum.lith_raw) ? 'Carbonate' : test(/sandstone/, datum.lith_raw) ? 'Sandstone' : test(/mudstone|claystone|siltstone|shale/, datum.lith_raw) ? 'Mud and shale' : test(/conglomerate|breccia|gravel/, datum.lith_raw) ? 'Coarse (gravel)' : test(/siliciclastic/, datum.lith_raw) ? 'Siliciclastic (unspecified)' : test(/^tar$|coal|peat|lignite|amber/, datum.lith_raw) ? 'Organic (coal, peat, tar)' : test(/tuff|ash|volcan/, datum.lith_raw) ? 'Volcanic' : (datum.lith_raw === '' || datum.lith_raw === 'not reported') ? 'Unknown' : 'Other'", "as": "lith_group"},
+    {"calculate": "indexof(['poor', 'medium', 'good', 'excellent'], datum.preservation_quality)", "as": "q_order"}
   ],
-  "mark": {"type": "bar", "stroke": "white", "strokeWidth": 0.5},
-  "encoding": {
-    "x": {
-      "field": "nx",
-      "type": "quantitative",
-      "title": "← worse preserved   |   % of fossils   |   better preserved →",
-      "scale": {"domain": [-60, 100]},
-      "axis": {"format": "d", "labelExpr": "abs(datum.value) + '%'"}
+  "vconcat": [
+    {
+      "title": {"text": "How well preserved are dinosaur fossils?", "subtitle": "By epoch. Click a bar to see its rock types below.", "anchor": "start"},
+      "width": 600,
+      "height": 200,
+      "transform": [
+        {"aggregate": [{"op": "count", "as": "fossils"}], "groupby": ["epoch", "preservation_quality", "q_order"]},
+        {"joinaggregate": [{"op": "sum", "field": "fossils", "as": "total"}], "groupby": ["epoch"]},
+        {"calculate": "datum.fossils / datum.total * 100", "as": "percentage"},
+        {"calculate": "datum.preservation_quality === 'poor' ? datum.percentage : datum.preservation_quality === 'medium' ? datum.percentage / 2 : 0", "as": "signed_percentage"},
+        {"stack": "percentage", "as": ["v1", "v2"], "groupby": ["epoch"], "sort": [{"field": "q_order", "order": "ascending"}]},
+        {"joinaggregate": [{"op": "sum", "field": "signed_percentage", "as": "offset"}], "groupby": ["epoch"]},
+        {"calculate": "datum.v1 - datum.offset", "as": "nx"},
+        {"calculate": "datum.v2 - datum.offset", "as": "nx2"}
+      ],
+      "params": [{"name": "epochPick", "select": {"type": "point", "fields": ["epoch"]}}],
+      "mark": {"type": "bar", "stroke": "white", "strokeWidth": 0.5, "cursor": "pointer"},
+      "encoding": {
+        "x": {"field": "nx", "type": "quantitative", "title": null,
+              "scale": {"domain": [-70, 100]},
+              "axis": {"labelExpr": "abs(datum.value) + '%'"}},
+        "x2": {"field": "nx2"},
+        "y": {"field": "epoch", "type": "nominal", "title": null,
+              "sort": ["Triassic", "Early Jurassic", "Middle Jurassic", "Late Jurassic", "Early Cretaceous", "Late Cretaceous"],
+              "axis": {"offset": 5, "ticks": false, "minExtent": 170, "domain": false}},
+        "color": {"field": "preservation_quality", "type": "nominal", "title": "Preservation",
+                  "scale": {"domain": ["poor", "medium", "good", "excellent"],
+                            "range": ["#c30d24", "#cccccc", "#94c6da", "#1770ab"]},
+                  "legend": {"orient": "top", "direction": "horizontal"}},
+        "opacity": {"condition": {"param": "epochPick", "value": 1}, "value": 0.3},
+        "tooltip": [
+          {"field": "epoch", "title": "Epoch"},
+          {"field": "preservation_quality", "title": "Preservation"},
+          {"field": "fossils", "title": "Fossils", "format": ","},
+          {"field": "percentage", "title": "% of epoch", "format": ".0f"}
+        ]
+      }
     },
-    "x2": {"field": "nx2"},
-    "y": {
-      "field": "epoch",
-      "type": "nominal",
-      "title": null,
-      "sort": ["Triassic", "Early Jurassic", "Middle Jurassic", "Late Jurassic", "Early Cretaceous", "Late Cretaceous"],
-      "axis": {"offset": 5, "ticks": false, "minExtent": 60, "domain": false}
-    },
-    "color": {
-      "field": "preservation_quality",
-      "type": "nominal",
-      "title": "Preservation",
-      "scale": {
-        "domain": ["poor", "medium", "good", "excellent"],
-        "range": ["#c30d24", "#cccccc", "#94c6da", "#1770ab"]
-      },
-      "legend": {"orient": "top", "direction": "horizontal"}
-    },
-    "tooltip": [
-      {"field": "epoch", "title": "Epoch"},
-      {"field": "preservation_quality", "title": "Preservation"},
-      {"field": "fossils", "title": "Fossils", "format": ","},
-      {"field": "percentage", "title": "Share of epoch", "format": ".0f"}
-    ]
-  },
+    {
+      "title": {"text": "Which rocks preserve fossils best?", "subtitle": "By rock type (all epochs, or the epoch selected above)", "anchor": "start"},
+      "width": 600,
+      "height": 260,
+      "transform": [
+        {"filter": {"param": "epochPick"}},
+        {"filter": "datum.lith_group !== 'Unknown'"},
+        {"aggregate": [{"op": "count", "as": "fossils"}], "groupby": ["lith_group", "preservation_quality", "q_order"]},
+        {"joinaggregate": [{"op": "sum", "field": "fossils", "as": "total"}], "groupby": ["lith_group"]},
+        {"filter": "datum.total >= 20"},
+        {"calculate": "datum.fossils / datum.total * 100", "as": "percentage"},
+        {"calculate": "datum.preservation_quality === 'poor' ? datum.percentage : datum.preservation_quality === 'medium' ? datum.percentage / 2 : 0", "as": "signed_percentage"},
+        {"stack": "percentage", "as": ["v1", "v2"], "groupby": ["lith_group"], "sort": [{"field": "q_order", "order": "ascending"}]},
+        {"joinaggregate": [{"op": "sum", "field": "signed_percentage", "as": "offset"}], "groupby": ["lith_group"]},
+        {"calculate": "datum.v1 - datum.offset", "as": "nx"},
+        {"calculate": "datum.v2 - datum.offset", "as": "nx2"}
+      ],
+      "mark": {"type": "bar", "stroke": "white", "strokeWidth": 0.5},
+      "encoding": {
+        "x": {"field": "nx", "type": "quantitative",
+              "title": "← worse preserved   |   % of fossils   |   better preserved →",
+              "scale": {"domain": [-70, 100]},
+              "axis": {"labelExpr": "abs(datum.value) + '%'"}},
+        "x2": {"field": "nx2"},
+        "y": {"field": "lith_group", "type": "nominal", "title": null,
+              "sort": ["Sandstone", "Mud and shale", "Siliciclastic (unspecified)", "Coarse (gravel)", "Carbonate", "Marl and mixed", "Organic (coal, peat, tar)", "Volcanic", "Other"],
+              "axis": {"offset": 5, "ticks": false, "minExtent": 170, "domain": false}},
+        "color": {"field": "preservation_quality", "type": "nominal", "legend": null},
+        "tooltip": [
+          {"field": "lith_group", "title": "Rock type"},
+          {"field": "preservation_quality", "title": "Preservation"},
+          {"field": "fossils", "title": "Fossils", "format": ","},
+          {"field": "percentage", "title": "% of rock type", "format": ".0f"}
+        ]
+      }
+    }
+  ],
+  "resolve": {"scale": {"color": "shared", "x": "shared"}},
   "config": {"view": {"stroke": null}}
 }
