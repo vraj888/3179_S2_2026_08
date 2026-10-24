@@ -1,0 +1,62 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Diverging stacked bar chart: how well dinosaur fossils are preserved in each epoch. Poor to the left, good and excellent to the right, medium straddling 0%.",
+  "width": 600,
+  "height": 260,
+  "data": {
+    "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/dinosauria_all.csv",
+    "format": {"type": "csv", "parse": {"max_ma": "number", "min_ma": "number"}}
+  },
+  "transform": [
+    {"filter": "datum.max_ma > 66"},
+    {"filter": "indexof(['poor', 'medium', 'good', 'excellent'], datum.preservation_quality) >= 0"},
+
+    {"calculate": "datum.min_ma > 225 ? 'Triassic' :  datum.min_ma > 175 ? 'Jurassic' : datum.min_ma > 125 ? 'Cretaceous' : datum.min_ma > 75 ? 'Paleogene' : 'Neogene'", "as": "epoch"},
+    {"aggregate": [{"op": "count", "as": "fossils"}], "groupby": ["epoch", "preservation_quality"]},
+    {"joinaggregate": [{"op": "sum", "field": "fossils", "as": "epoch_total"}], "groupby": ["epoch"]},
+    {"calculate": "datum.fossils / datum.epoch_total * 100", "as": "percentage"},
+
+    {"calculate": "indexof(['poor', 'medium', 'good', 'excellent'], datum.preservation_quality)", "as": "q_order"},
+    {"calculate": "datum.preservation_quality === 'poor' ? datum.percentage : datum.preservation_quality === 'medium' ? datum.percentage / 2 : 0", "as": "signed_percentage"},
+
+    {"stack": "percentage", "as": ["v1", "v2"], "groupby": ["epoch"], "sort": [{"field": "q_order", "order": "ascending"}]},
+    {"joinaggregate": [{"op": "sum", "field": "signed_percentage", "as": "offset"}], "groupby": ["epoch"]},
+    {"calculate": "datum.v1 - datum.offset", "as": "nx"},
+    {"calculate": "datum.v2 - datum.offset", "as": "nx2"}
+  ],
+  "mark": {"type": "bar", "stroke": "white", "strokeWidth": 0.5},
+  "encoding": {
+    "x": {
+      "field": "nx",
+      "type": "quantitative",
+      "title": "← worse preserved   |   % of fossils   |   better preserved →",
+      "scale": {"domain": [-60, 100]},
+      "axis": {"format": "d", "labelExpr": "abs(datum.value) + '%'"}
+    },
+    "x2": {"field": "nx2"},
+    "y": {
+      "field": "epoch",
+      "type": "nominal",
+      "title": null,
+      "sort": ["Triassic", "Early Jurassic", "Middle Jurassic", "Late Jurassic", "Early Cretaceous", "Late Cretaceous"],
+      "axis": {"offset": 5, "ticks": false, "minExtent": 60, "domain": false}
+    },
+    "color": {
+      "field": "preservation_quality",
+      "type": "nominal",
+      "title": "Preservation",
+      "scale": {
+        "domain": ["poor", "medium", "good", "excellent"],
+        "range": ["#c30d24", "#cccccc", "#94c6da", "#1770ab"]
+      },
+      "legend": {"orient": "top", "direction": "horizontal"}
+    },
+    "tooltip": [
+      {"field": "epoch", "title": "Epoch"},
+      {"field": "preservation_quality", "title": "Preservation"},
+      {"field": "fossils", "title": "Fossils", "format": ","},
+      {"field": "percentage", "title": "Share of epoch", "format": ".0f"}
+    ]
+  },
+  "config": {"view": {"stroke": null}}
+}
