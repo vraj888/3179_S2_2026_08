@@ -51,6 +51,51 @@
     }
   },
   {
+  "title": {"text": "Only the birds survived", "subtitle": "Number of different genera found in each time slice, stacked by group", "anchor": "start"},
+  "width": 600,
+  "height": 220,
+  "data": {
+    "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/diversity_over_time.csv",
+    "format": {"type": "csv", "parse": {"max_ma": "number", "min_ma": "number", "sampled_in_bin": "number", "n_occs": "number"}}
+  },
+  "transform": [
+    {"filter": "isValid(datum.max_ma) && isValid(datum.min_ma)"},
+    {"calculate": "datum.base_name === 'Aves' ? 'Birds' : datum.base_name === 'Crocodylomorpha' ? 'Crocodiles' : 'Non-bird dinosaurs'", "as": "group"},
+    {"calculate": "indexof(['Non-bird dinosaurs', 'Birds', 'Crocodiles'], datum.group)", "as": "group_order"}
+  ],
+  "layer": [
+    {
+      "mark": {"type": "bar", "stroke": "white", "strokeWidth": 0.5},
+      "encoding": {
+        "x": {"field": "max_ma", "type": "quantitative", "bin": "binned",
+              "title": "Millions of years ago",
+              "scale": {"domain": {"param": "periodSel"}, "reverse": true, "nice": false}},
+        "x2": {"field": "min_ma"},
+        "y": {"field": "n_occs", "type": "quantitative", "title": "Genera found", "stack": "normalize"},
+        "color": {"field": "group", "type": "nominal", "title": null,
+                  "scale": {"domain": ["Non-bird dinosaurs", "Birds", "Crocodiles"],
+                            "range": ["#d94841", "#e0a33a", "#56bed2"]},
+                  "legend": {"orient": "top", "direction": "horizontal"}},
+        "order": {"field": "group_order", "sort": "ascending"},
+        "tooltip": [
+          {"field": "group", "title": "Group"},
+          {"field": "interval_name", "title": "Time slice"},
+          {"field": "sampled_in_bin", "title": "Genera found"},
+          {"field": "n_occs", "title": "Fossil records", "format": ","}
+        ]
+      }
+    },
+    {
+      "mark": {"type": "rule", "strokeDash": [5, 4], "color": "#333"},
+      "encoding": {"x": {"datum": 66}}
+    },
+    {
+      "mark": {"type": "text", "align": "left", "dx": 6, "y": 8, "fontSize": 11, "fontWeight": "bold"},
+      "encoding": {"x": {"datum": 66}, "text": {"value": "Asteroid, 66 million years ago"}}
+    }
+  ]
+},
+  {
       "width": "container",
       "height": 40,
       "data": {"values": [
