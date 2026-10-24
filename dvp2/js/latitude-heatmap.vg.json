@@ -1,0 +1,81 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/data/dinosauria_all.csv",
+    "format": {"type": "csv"}
+  },
+  "transform": [
+    {"filter": "datum.max_ma > 75 && isValid(datum.lat) && isValid(datum.paleolat)"},
+    {"calculate": "(datum.max_ma + datum.min_ma) / 2", "as": "age"},
+    {"calculate": "datum.min_ma > 225 ? 'Triassic' :  datum.min_ma > 175 ? 'Jurassic' : datum.min_ma > 125 ? 'Cretaceous' : datum.min_ma > 75 ? 'Paleogene' : 'Neogene'", "as": "epoch"}
+  ],
+  "config": {
+    "view": {"stroke": "transparent"},
+    "axis": {"grid": true, "tickBand": "extent"}
+  },
+  "hconcat": [
+    {
+      "title": "Where the fossil is found today",
+      "width": 330,
+      "height": 360,
+      "mark": {"type": "rect", "stroke": "white", "strokeWidth": 1},
+      "encoding": {
+        "x": {
+          "field": "epoch",
+          "type": "ordinal",
+          "title": null,
+          "sort": ["Triassic","Jurassic", "Cretaceous", "Paleogene","Neogene"],
+          "axis": {"labelAngle": -40}
+        },
+        "y": {
+          "field": "lat",
+          "bin": {"step": 10, "extent": [-90, 90]},
+          "type": "quantitative",
+          "title": "Latitude (°, negative = south)"
+        },
+        "color": {
+          "aggregate": "count",
+          "type": "quantitative",
+          "title": "Fossils",
+          "scale": {"type": "log", "scheme": "yelloworangebrown"}
+        },
+        "tooltip": [
+          {"field": "epoch", "title": "Epoch"},
+          {"aggregate": "count", "title": "Fossils"}
+        ]
+      }
+    },
+    {
+      "title": "Where the dinosaur lived",
+      "width": 330,
+      "height": 360,
+      "mark": {"type": "rect", "stroke": "white", "strokeWidth": 1},
+      "encoding": {
+        "x": {
+          "field": "epoch",
+          "type": "ordinal",
+          "title": null,
+          "sort": ["Triassic","Jurassic", "Cretaceous", "Paleogene","Neogene"],
+          "axis": {"labelAngle": -40}
+        },
+        "y": {
+          "field": "paleolat",
+          "bin": {"step": 10, "extent": [-90, 90]},
+          "type": "quantitative",
+          "title": null
+        },
+        "color": {
+          "aggregate": "count",
+          "type": "quantitative",
+          "title": "Fossils",
+          "scale": {"type": "log", "scheme": "yelloworangebrown"}
+        },
+        "tooltip": [
+          {"field": "epoch", "title": "Epoch"},
+          {"aggregate": "count", "title": "Fossils"}
+        ]
+      }
+    }
+  ],
+  "resolve": {"scale": {"color": "shared", "y": "shared"}}
+}

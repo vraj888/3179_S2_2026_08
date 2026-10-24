@@ -9,7 +9,7 @@
   "vconcat":[
     {
     "width":"container",
-    "height": 250,
+    "height": 75,
     "transform": [
     {
       "calculate": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2",
