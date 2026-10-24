@@ -3,7 +3,7 @@
   "width": 650,
   "height": 450,
   "data": {
-    "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/e213d1bea1f387ef87f17f64582a0c7c9653e28b/dvp2/data/taxon-first-last.csv",
+    "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/taxon-first-last.csv",
     "format": {"type": "csv", "parse": {"max_ma": "number", "min_ma": "number","n_occs":"number"}}
   },
   "transform": [

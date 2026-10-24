@@ -20,7 +20,7 @@
 
   ],
   "vconcat":[
-      {
+    {
         "title":{
           "text":"Use this range brush to filter values based on their age"
         },
@@ -58,7 +58,7 @@
         },
         {
           "data": {
-          "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/earth_occurences_location.csv",
+          "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/dinosauria_all.csv",
           "format": {"type": "csv"}
         },
           "transform": [
@@ -107,49 +107,7 @@
             "y": {"field": "row", "type": "nominal"},
             "text": {"field": "period"}
           }
-        },
-        {
-          "data": {
-          "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/earth_occurences_location.csv",
-          "format": {"type": "csv"}
-        },
-          "transform": [
-        {
-          "calculate": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2",
-          "as": "mid_ma"
-        },
-        {
-          "calculate": "floor(datum.mid_ma / 5) * 5 + 2.5",
-          "as": "time_bin"
-        },
-        {
-          "aggregate": [{"op": "count", "as": "observations"}],
-          "groupby": ["time_bin"]
-        }],
-        "mark": {
-          "type": "line",
-          "color": "#867B6F",
-          "strokeWidth": 2,
-          "clip": true
-        },
-        "encoding": {
-          "x": {
-            "field": "time_bin",
-            "type": "quantitative",
-            "axis": {"title": "Millions of years ago"}
-          },
-          "y": {
-            "field": "observations",
-            "type": "quantitative",
-            "title": "Number of observations",
-            "scale": {"type": "pow", "exponent": {"expr": "scale_exp"}}
-          },
-          "tooltip": [
-            {"field": "time_bin", "type": "quantitative", "title": "Time (Ma)"},
-            {"field": "observations", "type": "quantitative", "title": "Observations"}
-          ]
         }
-      }
       ]
     },
     {

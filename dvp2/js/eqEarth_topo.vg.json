@@ -15,7 +15,7 @@
     },
     {
       "data": {
-        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/data/earth_occurences_location.csv",
+        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/data/dinosauria_all.csv",
         "format": {"type": "csv"}
       },
       "mark": {"type": "circle", "color": "red", "opacity": 0.5,"size": 30,"tooltip":{"content": "data"}},
