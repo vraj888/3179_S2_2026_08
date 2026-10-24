@@ -5,97 +5,25 @@
     "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/earth_occurences_location.csv",
     "format": {"type": "csv"}
   },
-  
-  "vconcat":[
+  "params": [
     {
-    "width":"container",
-    "height": 75,
-    "transform": [
-    {
-      "calculate": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2",
-      "as": "mid_ma"
-    },
-    {
-      "calculate": "floor(datum.mid_ma / 5) * 5 + 2.5",
-      "as": "time_bin"
-    },
-    {
-      "aggregate": [{"op": "count", "as": "observations"}],
-      "groupby": ["time_bin"]
-    }
-  ],
-  "mark": {
-    "type": "line",
-    "color": "#333333",
-    "strokeWidth": 2,
-    "point": {"filled": true, "size": 28}
-  },
-  "encoding": 
-    {
-      "x": {
-        "field": "time_bin",
-        "type": "quantitative",
-        "scale": {"domain": {"param": "periodSel"}, "reverse": true, "nice": false},
-        "axis": {"title": "Millions of years ago"}
-      },
-      "y": {
-        "field": "observations",
-        "type": "quantitative",
-        "title": "Number of observations",
-        "scale": {"type": "log"}
-      },
-      "tooltip": [
-        {"field": "time_bin", "type": "quantitative", "title": "Time (Ma)"},
-        {"field": "observations", "type": "quantitative", "title": "Observations"}
-      ]
-    }
-  },
-  {
-  "title": {"text": "Only the birds survived", "subtitle": "Number of different genera found in each time slice, stacked by group", "anchor": "start"},
-  "width": 600,
-  "height": 220,
-  "data": {
-    "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/diversity_over_time.csv",
-    "format": {"type": "csv", "parse": {"max_ma": "number", "min_ma": "number", "sampled_in_bin": "number", "n_occs": "number"}}
-  },
-  "transform": [
-    {"filter": "isValid(datum.max_ma) && isValid(datum.min_ma)"},
-    {"calculate": "datum.base_name === 'Aves' ? 'Birds' : datum.base_name === 'Crocodylomorpha' ? 'Crocodiles' : 'Non-bird dinosaurs'", "as": "group"},
-    {"calculate": "indexof(['Non-bird dinosaurs', 'Birds', 'Crocodiles'], datum.group)", "as": "group_order"}
-  ],
-  "layer": [
-    {
-      "mark": {"type": "bar", "stroke": "white", "strokeWidth": 0.5},
-      "encoding": {
-        "x": {"field": "max_ma", "type": "quantitative", "bin": "binned",
-              "title": "Millions of years ago",
-              "scale": {"domain": {"param": "periodSel"}, "reverse": true, "nice": false}},
-        "x2": {"field": "min_ma"},
-        "y": {"field": "n_occs", "type": "quantitative", "title": "Genera found", "stack": "normalize"},
-        "color": {"field": "group", "type": "nominal", "title": null,
-                  "scale": {"domain": ["Non-bird dinosaurs", "Birds", "Crocodiles"],
-                            "range": ["#d94841", "#e0a33a", "#56bed2"]},
-                  "legend": {"orient": "top", "direction": "horizontal"}},
-        "order": {"field": "group_order", "sort": "ascending"},
-        "tooltip": [
-          {"field": "group", "title": "Group"},
-          {"field": "interval_name", "title": "Time slice"},
-          {"field": "sampled_in_bin", "title": "Genera found"},
-          {"field": "n_occs", "title": "Fossil records", "format": ","}
-        ]
+      "name": "scale_exp",
+      "value": 0.25,
+      "bind": {
+        "input": "select",
+        "options": [1, 0.5, 0.25],
+        "labels": ["Linear", "Square root", "Compressed (log-like)"],
+        "name": "Y-axis scale: ",
+        "element": "#scaleControl"
       }
-    },
-    {
-      "mark": {"type": "rule", "strokeDash": [5, 4], "color": "#333"},
-      "encoding": {"x": {"datum": 66}}
-    },
-    {
-      "mark": {"type": "text", "align": "left", "dx": 6, "y": 8, "fontSize": 11, "fontWeight": "bold"},
-      "encoding": {"x": {"datum": 66}, "text": {"value": "Asteroid, 66 million years ago"}}
     }
-  ]
-},
-  {
+
+  ],
+  "vconcat":[
+      {
+        "title":{
+          "text":"Use this range brush to filter values based on their age"
+        },
       "width": "container",
       "height": 40,
       "data": {"values": [
@@ -124,44 +52,189 @@
             "y": {"field": "row", "type": "nominal",
                   "axis": {"title": null, "labels": false, "ticks": false, "domain": false, "minExtent": 50}},
             "color": {"field": "period", "type": "nominal", "legend": null,
-              "scale": {
-                "domain": ["Triassic","Jurassic","Cretaceous","Paleogene","Neogene","Quaternary"],
-                "range": ["#964ea4","#56bed2","#94cf6b","#fdaa6f","#ffea3f","#fafa94"]}},
+              "scale": {"scheme":"browns"}},
             "opacity": {"condition": {"param": "periodSel", "value": 1}, "value": 0.4}
           }
         },
         {
+          "data": {
+          "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/earth_occurences_location.csv",
+          "format": {"type": "csv"}
+        },
+          "transform": [
+        {
+          "calculate": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2",
+          "as": "mid_ma"
+        },
+        {
+          "calculate": "floor(datum.mid_ma / 5) * 5 + 2.5",
+          "as": "time_bin"
+        },
+        {
+          "aggregate": [{"op": "count", "as": "observations"}],
+          "groupby": ["time_bin"]
+        }],
+        "mark": {
+          "type": "line",
+          "color": "#867B6F",
+          "strokeWidth": 2,
+          "clip": true
+        },
+        "encoding": {
+          "x": {
+            "field": "time_bin",
+            "type": "quantitative",
+            "axis": {"title": "Millions of years ago"}
+          },
+          "y": {
+            "field": "observations",
+            "type": "quantitative",
+            "title": "Number of observations",
+            "scale": {"type": "pow", "exponent": {"expr": "scale_exp"}}
+          },
+          "tooltip": [
+            {"field": "time_bin", "type": "quantitative", "title": "Time (Ma)"},
+            {"field": "observations", "type": "quantitative", "title": "Observations"}
+          ]
+        }
+      },
+        {
           "transform": [{"filter": "datum.start_ma - datum.end_ma > 20"}],
-          "mark": {"type": "text", "fontSize": 12, "fontWeight": "bold", "color": "#222"},
+          "mark": {"type": "text", "fontSize": 12, "fontWeight": "bold", "color": "black"},
           "encoding": {
             "x": {"field": "mid", "type": "quantitative",
                   "scale": {"reverse": true, "domain": [252, 0], "nice": false}},
             "y": {"field": "row", "type": "nominal"},
             "text": {"field": "period"}
           }
+        },
+        {
+          "data": {
+          "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/earth_occurences_location.csv",
+          "format": {"type": "csv"}
+        },
+          "transform": [
+        {
+          "calculate": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2",
+          "as": "mid_ma"
+        },
+        {
+          "calculate": "floor(datum.mid_ma / 5) * 5 + 2.5",
+          "as": "time_bin"
+        },
+        {
+          "aggregate": [{"op": "count", "as": "observations"}],
+          "groupby": ["time_bin"]
+        }],
+        "mark": {
+          "type": "line",
+          "color": "#867B6F",
+          "strokeWidth": 2,
+          "clip": true
+        },
+        "encoding": {
+          "x": {
+            "field": "time_bin",
+            "type": "quantitative",
+            "axis": {"title": "Millions of years ago"}
+          },
+          "y": {
+            "field": "observations",
+            "type": "quantitative",
+            "title": "Number of observations",
+            "scale": {"type": "pow", "exponent": {"expr": "scale_exp"}}
+          },
+          "tooltip": [
+            {"field": "time_bin", "type": "quantitative", "title": "Time (Ma)"},
+            {"field": "observations", "type": "quantitative", "title": "Observations"}
+          ]
         }
+      }
       ]
     },
+    {
+    "width":"container",
+    "height": 250,
+    "transform": [
+    {
+      "calculate": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2",
+      "as": "mid_ma"
+    },
+    {
+      "calculate": "floor(datum.mid_ma / 5) * 5 + 2.5",
+      "as": "time_bin"
+    },
+    {
+      "aggregate": [{"op": "count", "as": "observations"}],
+      "groupby": ["time_bin"]
+    }
+  ],
+  "layer": [
+      {
+        "mark": {
+          "type": "line",
+          "color": "#867B6F",
+          "strokeWidth": 2,
+          "clip": true,
+          "point": {"filled": true, "size": 28, "color": "#A8582A"}
+        },
+        "encoding": {
+          "x": {
+            "field": "time_bin",
+            "type": "quantitative",
+            "scale": {"domain": {"param": "periodSel", "encoding": "x"}, "reverse": true, "nice": false},
+            "axis": {"title": "Millions of years ago"}
+          },
+          "y": {
+            "field": "observations",
+            "type": "quantitative",
+            "title": "Number of observations",
+            "scale": {"type": "pow", "exponent": {"expr": "scale_exp"}}
+          },
+          "tooltip": [
+            {"field": "time_bin", "type": "quantitative", "title": "Time (Ma)"},
+            {"field": "observations", "type": "quantitative", "title": "Observations"}
+          ]
+        }
+      },
+      {
+        "mark": {"type": "rule", "strokeDash": [5, 4], "color": "#333", "clip": true},
+        "encoding": {
+          "x": {"datum": 66, "type": "quantitative",
+                "scale": {"domain": {"param": "periodSel", "encoding": "x"}, "reverse": true, "nice": false}}
+        }
+      },
+      {
+        "mark": {"type": "text", "align": "left", "dx": 6, "y": 8, "fontSize": 11, "clip": true},
+        "encoding": {
+          "x": {"datum": 66, "type": "quantitative",
+                "scale": {"domain": {"param": "periodSel", "encoding": "x"}, "reverse": true, "nice": false}},
+          "text": {"value": "Asteroid, 66 million years ago"}
+        }
+      }
+    ]
+  },
   {
-    "width": 800,
+    "title":"Location of discoveries from the selected time range.",
+    "width": "container",
   "height": 450,
   "projection": {
-    "type": "equalEarth"
-  },
+  "type": "equalEarth"
+    },
   "layer": [
     {
       "data": {
         "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/2_symbol_map/js/ne_110m_admin_0_countries.topojson",
         "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
       },
-      "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"}
+      "mark": {"type": "geoshape", "fill": "#F5F0E6", "stroke": "#b8a99a"}
     },
     {
       "data": {
         "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/7_others/oceans.topojson",
         "format": {"type": "topojson", "feature": "oceans"}
       },
-      "mark": {"type": "geoshape", "fill": "skyblue"}
+      "mark": {"type": "geoshape", "fill": "#867B6F"}
     },
   
     {
@@ -170,7 +243,7 @@
         "format": {"type": "csv"}
       },
 
-      "mark": {"type": "circle", "color": "red", "opacity": 0.5, "size": 30},
+      "mark": {"type": "circle", "color": "#A8582A", "opacity": 0.5, "size": 10},
       "transform": [
         {
           "calculate": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2",
@@ -188,9 +261,64 @@
   ]
   },
   {
+    "title":"Australian discoveries from the selected time range.",
+    "width": "container",
+  "height": 450,
+  "projection": {
+  "type": "mercator",
+  "center": [140, -10],
+  "scale": 680
+    },
+  "layer": [
+    {
+            "data": {
+                "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/js/au-states-topo.json",
+                "format": {
+                    "type": "topojson",
+                    "feature": "austates"
+                }
+            },
+            "mark": {
+                "type": "geoshape",
+                "fill": "#F5F0E6",
+                "stroke": "#b8a99a"
+            }
+        },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/7_others/oceans.topojson",
+        "format": {"type": "topojson", "feature": "oceans"}
+      },
+      "mark": {"type": "geoshape", "fill": "#867B6F"}
+    },
   
- "width": 800,
- "height": 340,
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/data/earth_occurences_location.csv",
+        "format": {"type": "csv"}
+      },
+
+      "mark": {"type": "circle", "color": "#A8582A", "opacity": 0.5, "size": 60},
+      "transform": [
+        {
+          "calculate": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2",
+          "as": "mid_ma"
+        },
+        {"calculate": "datum.mid_ma", "as": "start_ma"},
+        {"filter": {"param": "periodSel"}}
+      ],
+      "encoding": {
+        "longitude": {"field": "lng", "type": "quantitative"},
+        "latitude": {"field": "lat", "type": "quantitative"},
+        "tooltip": [{"field": "mid_ma", "type": "quantitative", "title": "Approx. age (Ma)"}]
+      }
+    }
+  ]
+  },
+  {
+  "title":"Top 5 fossils in the selected time range.",
+ "width": "container",
+ "height": 200,
  
  "transform": [
   {
@@ -226,14 +354,14 @@
    ]
   },
   {
-   "filter": "datum.rank <= 10"
+   "filter": "datum.rank <= 5"
   },
   {
-   "calculate": "datum.rank === 10 ? 1 : (datum.rank - 1) % 2",
+   "calculate": "datum.rank === 5 ? 1 : (datum.rank - 1) % 3",
    "as": "col"
   },
   {
-   "calculate": "floor((datum.rank - 1) / 2)",
+   "calculate": "floor((datum.rank - 1) / 3)",
    "as": "row"
   }
  ],
@@ -284,7 +412,7 @@
        0,
        40
       ]
-     },
+    },
      "legend": null
     },
     "color": {
@@ -330,7 +458,6 @@
   }
  ]
 
-  }
-  
+  }  
 ]
 }
