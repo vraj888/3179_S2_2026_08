@@ -4,6 +4,7 @@
   "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/lithology.csv"
  },
  "transform": [
+{"filter": "datum.lithology1 && datum.lithology1 !== 'not reported'"},
   {
    "calculate": "datum.lithology1 ? lower(trim(replace(datum.lithology1, /\\\"/g, ''))) : 'unknown'",
    "as": "lith"
@@ -158,6 +159,7 @@
    "calculate": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2",
    "as": "mid_ma"
   },
+  {"filter": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2 >= 2.58"},
   {
    "calculate": "datum.mid_ma >= 201.4 ? 'Triassic' : datum.mid_ma >= 143.1 ? 'Jurassic' : datum.mid_ma >= 66 ? 'Cretaceous' : datum.mid_ma >= 23.03 ? 'Paleogene' : datum.mid_ma >= 2.58 ? 'Neogene' : 'Quaternary'",
    "as": "period"
@@ -174,6 +176,7 @@
     "lith_group"
    ]
   },
+  
   {
    "calculate": "indexof([\"Triassic\", \"Jurassic\", \"Cretaceous\", \"Paleogene\", \"Neogene\", \"Quaternary\"], datum.period)",
    "as": "period_order"
