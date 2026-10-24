@@ -1,0 +1,16 @@
+interval_no,interval_name,max_ma,min_ma,X_Ft,X_bL,X_FL,X_bt,sampled_in_bin,implied_in_bin,n_occs,base_name
+25,Neogene,23.04,2.58,0,33,9,0,42,0,2072,Dinosauria
+25,Neogene,23.04,2.58,0,31,9,0,40,0,1930,Aves
+26,Paleogene,66,23.04,23,0,10,10,43,0,1090,Dinosauria
+26,Paleogene,66,23.04,22,0,10,9,41,0,1044,Aves
+14,Cretaceous,143.1,66,10,1,11,0,22,4,14387,Dinosauria
+14,Cretaceous,143.1,66,9,0,4,0,13,1,307,Aves
+15,Jurassic,201.4,143.1,0,0,2,1,3,4,3686,Dinosauria
+15,Jurassic,201.4,143.1,0,0,2,0,2,1,8,Aves
+16,Triassic,251.902,201.4,1,0,0,0,1,3,608,Dinosauria
+16,Triassic,251.902,201.4,0,0,0,0,0,0,0,Aves
+25,Neogene,23.04,2.58,0,1,0,0,1,0,943,Crocodylomorpha
+26,Paleogene,66,23.04,0,0,0,1,1,0,1146,Crocodylomorpha
+14,Cretaceous,143.1,66,0,0,0,1,1,1,2098,Crocodylomorpha
+15,Jurassic,201.4,143.1,0,0,0,1,1,1,802,Crocodylomorpha
+16,Triassic,251.902,201.4,1,0,0,0,1,1,68,Crocodylomorpha
