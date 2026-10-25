@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   
   "data": {
-    "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/earth_occurences_location.csv",
+    "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/dinosauria_all.csv",
     "format": {"type": "csv"}
   },
   "params": [
@@ -197,7 +197,7 @@
   
     {
       "data": {
-        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/data/earth_occurences_location.csv",
+        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/data/dinosauria_all.csv",
         "format": {"type": "csv"}
       },
 
@@ -252,7 +252,7 @@
   
     {
       "data": {
-        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/data/earth_occurences_location.csv",
+        "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/data/dinosauria_all.csv",
         "format": {"type": "csv"}
       },
 
