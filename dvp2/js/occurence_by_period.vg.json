@@ -88,8 +88,6 @@
           },
           "y": {
             "field": "observations",
-            "type": "quantitative",
-            "title": "Number of observations",
             "scale": {"type": "pow", "exponent": {"expr": "scale_exp"}}
           },
           "tooltip": [
