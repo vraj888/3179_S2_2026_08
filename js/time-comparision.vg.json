@@ -17,7 +17,7 @@
     "layer":[
         {
             "data": {
-                "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/js/gplates/topo/earth-110mya.json",
+                "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/js/gplates/topo/earth-110mya.json",
                 "format": {"type": "topojson", "feature": "earth-110mya"}
             },
             "mark": {"type": "geoshape", "fill": "white", "stroke": "black"},
@@ -50,7 +50,7 @@
     "layer":[
         {
             "data": {
-                "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/js/gplates/topo/earth-150mya.json",
+                "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/js/gplates/topo/earth-150mya.json",
                 "format": {"type": "topojson", "feature": "earth-150mya"}
             },
             "mark": {"type": "geoshape", "fill": "white", "stroke": "black"},
@@ -83,7 +83,7 @@
     "layer":[
         {
             "data": {
-                "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/js/gplates/topo/earth-200mya.json",
+                "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/js/gplates/topo/earth-200mya.json",
                 "format": {"type": "topojson", "feature": "earth-200mya"}
             },
             "mark": {"type": "geoshape", "fill": "white", "stroke": "black"},
@@ -116,7 +116,7 @@
     "layer":[
         {
             "data": {
-                "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/dvp2/js/gplates/topo/earth-250mya.json",
+                "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/refs/heads/main/js/gplates/topo/earth-250mya.json",
                 "format": {"type": "topojson", "feature": "earth-250mya"}
             },
             "mark": {"type": "geoshape", "fill": "white", "stroke": "black"},
