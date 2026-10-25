@@ -88,7 +88,8 @@
           },
           "y": {
             "field": "observations",
-            "scale": {"type": "pow", "exponent": {"expr": "scale_exp"}}
+            "scale": {"type": "pow", "exponent": {"expr": "scale_exp"}},
+            "axis":null
           },
           "tooltip": [
             {"field": "time_bin", "type": "quantitative", "title": "Time (Ma)"},
