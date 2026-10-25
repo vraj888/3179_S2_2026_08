@@ -34,15 +34,6 @@
           {"field": "collections", "title": "Collections", "format": ","}
         ]
       }
-    },
-    {
-      "mark": {"type": "text", "align": "left", "dx": 4, "fontSize": 11, "color": "#555"},
-      "encoding": {
-        "y": {"field": "band_start", "type": "quantitative", "bin": "binned"},
-        "y2": {"field": "band_end"},
-        "x": {"field": "collections", "type": "quantitative"},
-        "text": {"field": "collections", "type": "quantitative", "format": ","}
-      }
     }
   ]},
   {
