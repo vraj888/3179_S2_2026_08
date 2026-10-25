@@ -1,0 +1,99 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {"text": "How high up are marine fossils found today?", "subtitle": "Altitude of fossil sites in the top 8 countries", "anchor": "start"},
+  
+  "data": {
+    "url": "https://raw.githubusercontent.com/vraj888/3179_S2_2026_08/main/dvp2/data/marine_fossils_altitude.csv",
+    "format": {"type": "csv", "parse": {"altitude_value": "number", "max_ma": "number"}}
+  },
+  "vconcat":[
+    {
+      "width": "container",
+      "height": 200,
+  "transform": [
+    {"filter": "isValid(datum.altitude_value) && datum.max_ma > 66"},
+    {"calculate": "test(/f/i, datum.altitude_unit) ? datum.altitude_value * 0.3048 : datum.altitude_value", "as": "altitude_m"},
+    {"filter": "datum.altitude_m > -100 && datum.altitude_m < 5000"},
+    {"calculate": "floor(datum.altitude_m / 500) * 500", "as": "band_start"},
+    {"calculate": "datum.band_start + 500", "as": "band_end"},
+    {"aggregate": [{"op": "distinct", "field": "collection_no", "as": "collections"}],
+     "groupby": ["band_start", "band_end"]},
+    {"calculate": "format(datum.band_start, ',') + '–' + format(datum.band_end, ',') + ' m'", "as": "band_label"}
+  ],
+  "layer": [
+    {
+      "mark": {"type": "bar", "color": "#A8582A", "cornerRadiusEnd": 2},
+      "encoding": {
+        "y": {"field": "band_start", "type": "quantitative", "bin": "binned",
+              "title": "Altitude above sea level (m)",
+              "scale": {"domain": [0, 4500]}, "axis": {"tickCount": 9, "format": ","}},
+        "y2": {"field": "band_end"},
+        "x": {"field": "collections", "type": "quantitative", "title": "Number of collections (dig sites)"},
+        "tooltip": [
+          {"field": "band_label", "title": "Altitude"},
+          {"field": "collections", "title": "Collections", "format": ","}
+        ]
+      }
+    },
+    {
+      "mark": {"type": "text", "align": "left", "dx": 4, "fontSize": 11, "color": "#555"},
+      "encoding": {
+        "y": {"field": "band_start", "type": "quantitative", "bin": "binned"},
+        "y2": {"field": "band_end"},
+        "x": {"field": "collections", "type": "quantitative"},
+        "text": {"field": "collections", "type": "quantitative", "format": ","}
+      }
+    }
+  ]},
+  {
+    "width":"container",
+    "height": 450,
+    
+    "projection": {
+    "type": "equirectangular"
+  },
+
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/2_symbol_map/js/ne_110m_admin_0_countries.topojson",
+        "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+      },
+      "mark": {"type": "geoshape", "fill": "#F5F0E6", "stroke": "#b8a99a"}
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/7_others/oceans.topojson",
+        "format": {"type": "topojson", "feature": "oceans"}
+      },
+      "mark": {"type": "geoshape", "fill": "#867B6F"}
+    },
+  
+    {
+      
+  "transform": [
+    {"filter": "isValid(datum.altitude_value) && datum.altitude_value !== ''"},
+    {"calculate": "test(/f/i, datum.altitude_unit) ? toNumber(datum.altitude_value) * 0.3048 : toNumber(datum.altitude_value)", "as": "altitude_m"},
+    {"filter": "datum.altitude_m > 0 && datum.altitude_m < 5000"},
+    {"calculate": "toNumber(datum.lat)", "as": "lat_n"},
+    {"calculate": "toNumber(datum.lng)", "as": "lng_n"},
+    {"calculate": "datum.lat_n + datum.altitude_m / 250", "as": "spike_top"},
+    {"calculate": "(toNumber(datum.max_ma) + toNumber(datum.min_ma)) / 2", "as": "mid_ma"}
+  ],
+  "mark": {"type": "rule", "color": "#A8582A", "strokeWidth": 1.5, "opacity": 0.6},
+  "encoding": {
+    "longitude": {"field": "lng_n", "type": "quantitative"},
+    "latitude": {"field": "lat_n", "type": "quantitative"},
+    "longitude2": {"field": "lng_n"},
+    "latitude2": {"field": "spike_top"},
+    "tooltip": [
+      {"field": "altitude_m", "type": "quantitative", "title": "Altitude (m)", "format": ",.0f"},
+      {"field": "mid_ma", "type": "quantitative", "title": "Approx. age (Ma)", "format": ".0f"}
+    ]
+  }
+}
+  ]
+  }
+],
+  "config": {"view": {"stroke": null}}
+}
