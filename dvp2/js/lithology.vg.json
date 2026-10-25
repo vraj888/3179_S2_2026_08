@@ -175,300 +175,45 @@
     "period",
     "lith_group"
    ]
-  },
-  
-  {
-   "calculate": "indexof([\"Triassic\", \"Jurassic\", \"Cretaceous\", \"Paleogene\", \"Neogene\", \"Quaternary\"], datum.period)",
-   "as": "period_order"
-  },
-  {
-   "calculate": "datum.period_order % 2",
-   "as": "stag"
-  },
-  {
-   "calculate": "indexof([\"Sandstone\", \"Mud and shale\", \"Siliciclastic (unspecified)\", \"Coarse (gravel)\", \"Carbonate\", \"Marl and mixed\", \"Organic (coal, peat, tar)\", \"Volcanic\", \"Other\", \"Unknown\"], datum.lith_group)",
-   "as": "lith_order"
-  },
-  {
-   "stack": "count",
-   "groupby": [],
-   "as": [
-    "sx1",
-    "sx2"
-   ],
-   "offset": "normalize",
-   "sort": [
-    {
-     "field": "period_order",
-     "order": "ascending"
-    }
-   ]
-  },
-  {
-   "window": [
-    {
-     "op": "min",
-     "field": "sx1",
-     "as": "x"
-    },
-    {
-     "op": "max",
-     "field": "sx2",
-     "as": "x2"
-    },
-    {
-     "op": "dense_rank",
-     "as": "rank_lith"
-    }
-   ],
-   "groupby": [
-    "period"
-   ],
-   "frame": [
-    null,
-    null
-   ],
-   "sort": [
-    {
-     "field": "lith_order",
-     "order": "ascending"
-    }
-   ]
-  },
-  {
-   "window": [
-    {
-     "op": "dense_rank",
-     "as": "rank_period"
-    }
-   ],
-   "frame": [
-    null,
-    null
-   ],
-   "sort": [
-    {
-     "field": "period_order",
-     "order": "ascending"
-    }
-   ]
-  },
-  {
-   "stack": "count",
-   "groupby": [
-    "period"
-   ],
-   "as": [
-    "y",
-    "y2"
-   ],
-   "offset": "normalize",
-   "sort": [
-    {
-     "field": "lith_order",
-     "order": "ascending"
-    }
-   ]
-  },
-  {
-   "calculate": "datum.y2 - datum.y",
-   "as": "share"
-  },
-  {
-   "calculate": "datum.y + (datum.rank_lith - 1) * 0.008",
-   "as": "ny"
-  },
-  {
-   "calculate": "datum.y2 + (datum.rank_lith - 1) * 0.008",
-   "as": "ny2"
-  },
-  {
-   "calculate": "datum.x + (datum.rank_period - 1) * 0.01",
-   "as": "nx"
-  },
-  {
-   "calculate": "datum.x2 + (datum.rank_period - 1) * 0.01",
-   "as": "nx2"
-  },
-  {
-   "calculate": "(datum.nx + datum.nx2) / 2",
-   "as": "xc"
-  },
-  {
-   "calculate": "(datum.ny + datum.ny2) / 2",
-   "as": "yc"
   }
  ],
- "vconcat": [
-  {
-   "width": 800,
-   "height": 36,
-   "mark": {
-    "type": "text",
-    "baseline": "middle",
-    "align": "center",
-    "fontWeight": "bold",
-    "fontSize": 13
+ "width": 800,
+ "height": 450,
+ "mark": "bar",
+ "encoding": {
+  "x": {
+   "field": "period",
+   "type": "ordinal",
+   "sort": ["Triassic", "Jurassic", "Cretaceous", "Paleogene", "Neogene", "Quaternary"],
+   "title": "Geological period",
+   "axis":{"labels": true,"labelAngle":-45}
+  },
+  "y": {
+   "aggregate": "sum",
+   "field": "count",
+   "type": "quantitative",
+   "stack": "normalize",
+   "axis": {"title": "Percentage of occurrences", "format": ".0%","labels": true,"grid": true}
+  },
+  "color": {
+   "field": "lith_group",
+   "type": "nominal",
+   "title": "Lithology",
+   "scale": {
+    "domain": ["Sandstone", "Mud and shale", "Siliciclastic (unspecified)", "Coarse (gravel)", "Carbonate", "Marl and mixed", "Organic (coal, peat, tar)", "Volcanic", "Other", "Unknown"],
+    "range": ["#e0b162", "#8c6d62", "#c9b79c", "#b5651d", "#6baed6", "#74c4b8", "#2b2b2b", "#d94841", "#9467bd", "#d9d9d9"]
    },
-   "encoding": {
-    "x": {
-     "aggregate": "min",
-     "field": "xc",
-     "type": "quantitative",
-     "axis": null
-    },
-    "text": {
-     "field": "period",
-     "type": "nominal"
-    },
-    "y": {
-     "aggregate": "min",
-     "field": "stag",
-     "type": "quantitative",
-     "axis": null,
-     "scale": {
-      "domain": [
-       -0.6,
-       1.6
-      ]
-     }
-    }
-   }
+   "legend": {"orient": "right"}
   },
-  {
-   "width": 800,
-   "height": 450,
-   "layer": [
-    {
-     "mark": {
-      "type": "rect"
-     },
-     "encoding": {
-      "x": {
-       "field": "nx",
-       "type": "quantitative",
-       "axis": null
-      },
-      "x2": {
-       "field": "nx2"
-      },
-      "y": {
-       "field": "ny",
-       "type": "quantitative",
-       "axis": null
-      },
-      "y2": {
-       "field": "ny2"
-      },
-      "color": {
-       "field": "lith_group",
-       "type": "nominal",
-       "title": "Lithology",
-       "scale": {
-        "domain": [
-         "Sandstone",
-         "Mud and shale",
-         "Siliciclastic (unspecified)",
-         "Coarse (gravel)",
-         "Carbonate",
-         "Marl and mixed",
-         "Organic (coal, peat, tar)",
-         "Volcanic",
-         "Other",
-         "Unknown"
-        ],
-        "range": [
-         "#e0b162",
-         "#8c6d62",
-         "#c9b79c",
-         "#b5651d",
-         "#6baed6",
-         "#74c4b8",
-         "#2b2b2b",
-         "#d94841",
-         "#9467bd",
-         "#d9d9d9"
-        ]
-       },
-       "legend": {
-        "orient": "right"
-       }
-      },
-      "tooltip": [
-       {
-        "field": "period",
-        "type": "nominal",
-        "title": "Period"
-       },
-       {
-        "field": "lith_group",
-        "type": "nominal",
-        "title": "Lithology"
-       },
-       {
-        "field": "count",
-        "type": "quantitative",
-        "title": "Occurrences",
-        "format": ","
-       },
-       {
-        "field": "share",
-        "type": "quantitative",
-        "title": "Share of period",
-        "format": ".1%"
-       }
-      ]
-     }
-    },
-    {
-     "transform": [
-      {
-       "filter": "datum.share > 0.06 && (datum.x2 - datum.x) > 0.12"
-      }
-     ],
-     "mark": {
-      "type": "text",
-      "baseline": "middle",
-      "fontSize": 11
-     },
-     "encoding": {
-      "x": {
-       "field": "xc",
-       "type": "quantitative",
-       "axis": null
-      },
-      "y": {
-       "field": "yc",
-       "type": "quantitative",
-       "axis": null
-      },
-      "text": {
-       "field": "lith_group",
-       "type": "nominal"
-      },
-      "color": {
-       "condition": {
-        "test": "datum.lith_group === 'Organic (coal, peat, tar)' || datum.lith_group === 'Mud and shale'",
-        "value": "white"
-       },
-       "value": "#222"
-      }
-     }
-    }
-   ]
-  }
- ],
- "resolve": {
-  "scale": {
-   "x": "shared"
-  }
+  "tooltip": [
+   {"field": "period", "type": "nominal", "title": "Period"},
+   {"field": "lith_group", "type": "nominal", "title": "Lithology"},
+   {"field": "count", "type": "quantitative", "title": "Occurrences", "format": ","}
+  ]
  },
  "config": {
   "view": {
    "stroke": null
-  },
-  "concat": {
-   "spacing": 6
   },
   "axis": {
    "domain": false,

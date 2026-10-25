@@ -15,7 +15,7 @@
   ],
   "vconcat": [
     {
-      "title": {"text": "How well preserved are dinosaur fossils?", "subtitle": "By epoch. Click a bar to see its rock types below.", "anchor": "start"},
+      "title": {"text": "By epoch. Click a bar to see its rock types below.", "anchor": "start"},
       "width": 600,
       "height": 200,
       "transform": [
@@ -36,7 +36,7 @@
               "axis": {"labelExpr": "abs(datum.value) + '%'"}},
         "x2": {"field": "nx2"},
         "y": {"field": "epoch", "type": "nominal", "title": null,
-              "sort": ["Triassic", "Early Jurassic", "Middle Jurassic", "Late Jurassic", "Early Cretaceous", "Late Cretaceous"],
+              "sort": ["Triassic", "Jurassic","Cretaceous", "Paleogene","Neogene"],
               "axis": {"offset": 5, "ticks": false, "minExtent": 170, "domain": false}},
         "color": {"field": "preservation_quality", "type": "nominal", "title": "Preservation",
                   "scale": {"domain": ["poor", "medium", "good", "excellent"],
@@ -52,7 +52,7 @@
       }
     },
     {
-      "title": {"text": "Which rocks preserve fossils best?", "subtitle": "By rock type (all epochs, or the epoch selected above)", "anchor": "start"},
+      "title": {"text": "By rock type (all epochs, or the epoch selected above)", "anchor": "start"},
       "width": 600,
       "height": 260,
       "transform": [

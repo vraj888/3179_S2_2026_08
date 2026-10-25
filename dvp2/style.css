@@ -1,4 +1,221 @@
+:root {
+    --bg: #f5f0e6;
+    --surface: #fffdf8;
+    --ink: #2b2620;
+    --muted: #6b6155;
+    --accent: #a8582a;
+    --border: #e4dccd;
+    --hero-bg: #2f2924;
+    --hero-ink: #f5f0e6;
+    --radius: 12px;
+}
 
-.row {
-    border: 1px solid black;
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 64px;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    font-family: "Fraunces", Georgia, serif;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Header */
+.hero {
+    background: var(--hero-bg);
+    color: var(--hero-ink);
+    padding: 72px 0 56px;
+}
+
+.hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    font-weight: 700;
+}
+
+.eyebrow {
+    margin: 0 0 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #d9a274;
+}
+
+.lead {
+    max-width: 640px;
+    margin: 16px 0 0;
+    font-size: 1.15rem;
+    color: #d8cfc2;
+}
+
+/* Navigation */
+.site-nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(245, 240, 230, 0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border);
+}
+
+.site-nav .container {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.site-nav a {
+    padding: 14px 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+}
+
+.site-nav a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+/* Sections */
+.section {
+    padding: 56px 0 8px;
+}
+
+.section-head {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.section-num {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+}
+
+.section-head h2 {
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+
+.section-head p {
+    max-width: 720px;
+    margin: 8px 0 0;
+    color: var(--muted);
+}
+
+/* Cards */
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 5%;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 2px rgba(43, 38, 32, 0.05);
+}
+
+.card h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.card p {
+    margin: 8px 0 0;
+    color: var(--muted);
+}
+
+.placeholder {
+    border-style: dashed;
+    background: transparent;
+    box-shadow: none;
+    text-align: center;
+}
+
+/* Charts: fixed-width specs scroll inside their card instead of breaking the page */
+.vis {
+    width: 100%;
+    min-height: 300px;
+    overflow-x: auto;
+}
+
+.vis-full .vega-embed {
+    width: 100%;
+}
+
+/* Map with annotations beside it on wide screens */
+.split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0 24px;
+}
+
+@media (min-width: 1200px) {
+    .split {
+        grid-template-columns: minmax(0, 1fr) 280px;
+    }
+}
+
+.notes {
+    border-left: 4px solid var(--accent);
+}
+
+/* Footer */
+.site-footer {
+    margin-top: 48px;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.site-footer p {
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 0 16px;
+    }
+
+    .hero {
+        padding: 48px 0 36px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .section-head {
+        gap: 12px;
+    }
+
+    .section-num {
+        font-size: 1.5rem;
+    }
 }

@@ -32,6 +32,7 @@
                 <a href="#asteroid">The Asteroid</a>
                 <a href="#rocks">Rocks &amp; preservation</a>
                 <a href="#where">Where they're found</a>
+                <a href="#marine">Marine Fossils</a>
                 <a href="#australia">Australia</a>
             </div>
         </nav>
@@ -53,7 +54,7 @@
                        
                     <P>Certain taxons seem to dominate the fossil records.</P>
                     <div id="taxon-range" class="vis"></div>
-                    
+                    <p>Grallator seems to have <i>400+</i> discovered fossils but Eubrontes records can be traced back to over a range of <i>150 million years</i>.</p>
                 </div>
                 
             </section>
@@ -86,10 +87,12 @@
                 </div>
                 <div class="card">
                     <div id="lithology" class="vis"></div>
+                    <p><span style="color: #E0B162;">Sandstone</span> is the dominant medium of fossil preservation. <br> The Paleogene seems to have almost no fossils preserved in <span style="color: #4c78a8;">Marl and mixed</span>  lithology.</p>
                 </div>
                 <div class="card">
-                    <p>Lets see how well the fossils are preserved based on age and rock type.</p>
+                    <h4>Lets see how well the fossils are preserved based on age and rock type.</h4>
                     <div id="preservation" class="vis"></div>
+                    <p>Organic lithology seems to have the largest proportion of excellent fossils. Coarse (gravel) is evidently the worst at preserving fossils.</p>
                 </div>
             </section>
 
@@ -103,18 +106,43 @@
                 </div>
                 <div class="card">
                     <div id="multiMap" class="vis vis-full"></div>
-                </div>
-                <div class="card">
                     <div id="heatMap" class="vis"></div>
+                    <p>
+                        Continental drift helps explain why fossil sites cluster in the Northern Hemisphere's mid-latitudes today.
+                        Reconstructing the continents' positions when these organisms lived reveals a gradual shift in their
+                        distribution toward the North Pole.
+                    </p>
                 </div>
             </section>
 
-            <section id="australia" class="section">
+            <section id="marine" class="section">
                 <div class="section-head">
                     <span class="section-num">05</span>
                     <div>
+                        <h2>Marine Fossils</h2>
+                        <p>Some of the marine fossils have been discovered on mountian tops.</p>
+                    </div>
+                </div>
+                <div class="split">
+                    
+                <div class="card">
+                    
+                    <div id="altitude" class="vis"></div>
+                    
+                </div>
+                    <aside class="card notes">
+                        <h3>Annotations</h3>
+                        <p>Fossils found high in mountain ranges suggest these regions were once submerged beneath ancient seas. Over millions of years, tectonic uplift raised marine sediments and the fossils preserved within them, leaving a striking record of past oceans in places that are now thousands of meter above sea-level.</p>
+                    </aside>
+                </div>
+            </section>
+
+             <section id="australia" class="section">
+                <div class="section-head">
+                    <span class="section-num">06</span>
+                    <div>
                         <h2>Australia's fossil hotspots</h2>
-                        <p>Fossil occurrences grouped into hexagons. Darker hexagons hold more finds.</p>
+                        <p>Fossil discoveries across Australia, categorised by state.</p>
                     </div>
                 </div>
                 <div class="split">
@@ -123,7 +151,12 @@
                     </div>
                     <aside class="card notes">
                         <h3>Annotations</h3>
-                        <p>Notes on the dense spots go here.</p>
+                        <p>
+                            Victoria leads in the total number of fossil discoveries, while Queensland
+                            stands out for the variety of its finds across numerous discovery sites. This contrast shows
+                            that a region with the most fossils is not necessarily the region with the broadest range
+                            of discoveries.
+                        </p>
                     </aside>
                 </div>
             </section>
@@ -152,7 +185,8 @@
             embed('preservation', 'js/preservation.vg.json');
             embed('multiMap', 'js/time-comparision.vg.json');
             embed('heatMap', 'js/latitude-heatmap.vg.json');
-            embed('aus-hex', 'js/aus-hex.vg.json');
+            embed('aus-hex', 'js/aus-states.vg.json');
+            embed('altitude', 'js/altitude.vg.json');
         </script>
     </body>
 </html>
