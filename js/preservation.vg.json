@@ -7,6 +7,7 @@
   },
   "transform": [
     {"filter": "datum.max_ma > 66"},
+    {"calculate": "(datum.max_ma + datum.min_ma) / 2", "as": "mid_ma"},
     {"filter": "indexof(['poor', 'medium', 'good', 'excellent'], datum.preservation_quality) >= 0"},
     {"calculate": "datum.mid_ma >= 201.4 ? 'Triassic' : datum.mid_ma >= 143.1 ? 'Jurassic' : datum.mid_ma >= 66 ? 'Cretaceous' : datum.mid_ma >= 23.03 ? 'Paleogene' : datum.mid_ma >= 2.58 ? 'Neogene' : 'Quaternary'", "as": "epoch"},
     {"calculate": "lower(replace(datum.lithology1 || '', /\"/g, ''))", "as": "lith_raw"},
