@@ -7,7 +7,7 @@
   "transform": [
     {"filter": "datum.max_ma > 75 && isValid(datum.lat) && isValid(datum.paleolat)"},
     {"calculate": "(datum.max_ma + datum.min_ma) / 2", "as": "age"},
-    {"calculate": "datum.min_ma > 225 ? 'Triassic' :  datum.min_ma > 175 ? 'Jurassic' : datum.min_ma > 125 ? 'Cretaceous' : datum.min_ma > 75 ? 'Paleogene' : 'Neogene'", "as": "epoch"}
+    {"calculate": "datum.age >= 201.4 ? 'Triassic' : datum.age >= 143.1 ? 'Jurassic' : datum.age >= 66 ? 'Cretaceous' : datum.age >= 23.03 ? 'Paleogene' : datum.age >= 2.58 ? 'Neogene' : 'Quaternary'", "as": "epoch"}
   ],
   "config": {
     "view": {"stroke": "transparent"},
